@@ -1,0 +1,1900 @@
+-----App--
+
+
+////////Big app//
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './Components2/Header'; 
+import Footer from './Components2/Footer'; 
+import AppointmentScheduler from './Components2/AppointmentScheduler'; 
+import MedicationReminder from './Components2/MedicationReminder'; 
+import MedicalRecord from './Components2/MedicalRecord'; 
+import MetricsPage from './Pages/MetricsPage';
+import EducationResources from './Components2/EducationResources'; 
+import HomePage from './Pages/HomePage'; 
+
+const App = () => {
+  return (
+    <Router>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/appointments" element={<AppointmentScheduler />} />
+          <Route path="/reminders" element={<MedicationReminder />} />
+          <Route path="/records" element={<MedicalRecord />} />
+          <Route path="/metrics" element={<MetricsPage />} />
+          <Route path="/education" element={<EducationResources />} />
+        </Routes>
+      </main>
+      <Footer />
+    </Router>
+  );
+};
+
+export default App;
+
+
+Appointment /////
+
+// src/pages/AppointmentScheduler.js
+import React, { useState } from 'react';
+import { Container, Typography, TextField, Button, Grid, Box } from '@mui/material';
+
+const AppointmentScheduler = () => {
+  const [appointmentData, setAppointmentData] = useState({
+    name: '',
+    email: '',
+    date: '',
+    time: '',
+  });
+
+  const handleChange = (e) => {
+    setAppointmentData({
+      ...appointmentData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Process the appointment scheduling here (e.g., API call)
+    console.log('Appointment Data:', appointmentData);
+  };
+
+  return (
+    <Container maxWidth="sm" style={{ marginTop: '30px' }}>
+      <Typography variant="h4" component="h1" gutterBottom align="center" style={{ marginBottom: '20px' }}>
+        Schedule an Appointment
+      </Typography>
+      <Typography variant="body1" paragraph align="center">
+        Use the form below to schedule, reschedule, or cancel your medical appointments.
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="name"
+              name="name"
+              label="Full Name"
+              value={appointmentData.name}
+              onChange={handleChange}
+              required
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="email"
+              name="email"
+              label="Email Address"
+              value={appointmentData.email}
+              onChange={handleChange}
+              required
+              variant="outlined"
+              type="email"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="date"
+              name="date"
+              label="Appointment Date"
+              type="date"
+              value={appointmentData.date}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="time"
+              name="time"
+              label="Appointment Time"
+              type="time"
+              value={appointmentData.time}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          style={{ marginTop: '20px' }}
+        >
+          Schedule Appointment
+        </Button>
+      </Box>
+    </Container>
+  );
+};
+
+export default AppointmentScheduler;
+
+
+
+//
+Education
+//
+
+import React, { useState } from 'react';
+import { Container, Typography, Button, Grid, Card, CardContent, CardMedia, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
+// Import local images
+import stressImg from '../assets/images/stress.jpeg';
+import mentalImg from '../assets/images/Mental.jpeg';
+import healthyHabitImg from '../assets/images/Healthy-habit.jpeg';
+import nutritionImg from '../assets/images/Nutrition.jpeg';
+import sleepImg from '../assets/images/Sleep.jpeg';
+import emotionImg from '../assets/images/emotion.jpeg';
+
+// Define the resources with actual image imports
+const resources = [
+  {
+    title: 'Understanding Mental Health',
+    description: 'A comprehensive guide to understanding mental health issues, the stigma surrounding it, and how to approach treatment.',
+    details: 'This resource provides an in-depth look at mental health issues including various mental health conditions, the impact of stigma, and strategies for seeking help. It also discusses the importance of mental health awareness and the role of support systems in treatment.',
+    imageUrl: mentalImg,
+  },
+  {
+    title: 'Managing Stress Effectively',
+    description: 'Learn practical techniques to manage and reduce stress in everyday life. This article covers everything from mindfulness to time management.',
+    details: 'Effective stress management is crucial for maintaining overall well-being. This article explores various techniques such as mindfulness meditation, effective time management, and coping strategies to help reduce stress and improve quality of life.',
+    imageUrl: stressImg,
+  },
+  {
+    title: 'Healthy Habits for a Better Life',
+    description: 'Developing healthy daily habits can transform your life. Explore tips and strategies that can improve your physical and mental well-being.',
+    details: 'This resource outlines various healthy habits that can lead to a more fulfilling life. Topics include physical exercise, balanced nutrition, sufficient sleep, and maintaining strong social connections. Each habit is explained with practical tips for implementation.',
+    imageUrl: healthyHabitImg,
+  },
+  {
+    title: 'The Importance of Sleep',
+    description: 'Sleep is critical to health, yet many overlook its importance. This resource explains how to improve sleep quality and overall wellness.',
+    details: 'Quality sleep is essential for good health. This article provides insights into the benefits of adequate sleep, common sleep disorders, and strategies for improving sleep hygiene. It also discusses the impact of sleep on mental and physical health.',
+    imageUrl: sleepImg,
+  },
+  {
+    title: 'Nutrition and Mental Health',
+    description: 'Discover how your diet impacts your mental health, and which foods can promote a better mood and cognitive function.',
+    details: 'Nutrition plays a significant role in mental health. This resource explores the connection between diet and mental well-being, highlighting specific nutrients and foods that can enhance mood and cognitive function. Practical dietary recommendations are provided for better mental health.',
+    imageUrl: nutritionImg,
+  },
+  {
+    title: 'Building Emotional Resilience',
+    description: 'Learn how to build emotional resilience and cope with life’s challenges more effectively.',
+    details: 'Emotional resilience helps individuals navigate life’s challenges more effectively. This article discusses the concept of emotional resilience, its importance, and strategies for developing it. Techniques such as self-care, positive thinking, and stress management are covered.',
+    imageUrl: emotionImg,
+  },
+];
+
+// Define YouTube video cards with updated URLs
+const videos = [
+  {
+    title: 'The Science of Happiness',
+    description: 'An in-depth look at what makes us truly happy, featuring insights from experts in psychology.',
+    videoUrl: 'https://www.youtube.com/watch?v=9cqm3d0Vg5c',
+  },
+  {
+    title: 'How to Manage Stress',
+    description: 'Tips and techniques for managing stress effectively and improving mental health.',
+    videoUrl: 'https://www.youtube.com/watch?v=15GaKTP0gFE',
+  },
+  {
+    title: 'Healthy Eating for Better Life',
+    description: 'Explore the importance of healthy eating and its impact on overall wellness.',
+    videoUrl: 'https://www.youtube.com/watch?v=3DM3_ocFy0U',
+  },
+  {
+    title: 'Understanding Mental Health',
+    description: 'Learn about mental health issues, their impact, and strategies for improving mental well-being.',
+    videoUrl: 'https://www.youtube.com/watch?v=MyxCjnHqBq8',
+  },
+  {
+    title: 'The Role of Sleep in Health',
+    description: 'Why sleep is crucial for health and how to improve sleep quality.',
+    videoUrl: 'https://www.youtube.com/watch?v=3mufsteNrTI',
+  },
+  {
+    title: 'Building Emotional Resilience',
+    description: 'Techniques and strategies for developing emotional resilience and coping with challenges.',
+    videoUrl: 'https://www.youtube.com/watch?v=7InjgEs4OBA',
+  },
+];
+
+// Helper function to pad the resources array to ensure complete rows
+const padArray = (array, size) => {
+  const paddedArray = [...array];
+  while (paddedArray.length % size !== 0) {
+    paddedArray.push({
+      title: '',
+      description: '',
+      imageUrl: 'https://via.placeholder.com/300x200?text=Placeholder', // Placeholder image URL
+      details: '',
+    });
+  }
+  return paddedArray;
+};
+
+const EducationResources = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentResource, setCurrentResource] = useState(null);
+  const paddedResources = padArray(resources, 3);
+  const paddedVideos = padArray(videos, 3);
+
+  const handleOpenModal = (resource) => {
+    setCurrentResource(resource);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setCurrentResource(null);
+  };
+
+  return (
+    <Container sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom align="center">
+        Educational Resources
+      </Typography>
+      <Typography variant="body1" paragraph align="center">
+        Explore a wide range of educational resources to help improve your mental, physical, and emotional well-being.
+      </Typography>
+
+      <Typography variant="h5" gutterBottom align="center">
+        Articles
+      </Typography>
+      <Grid container spacing={4}>
+        {paddedResources.map((resource, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card variant="outlined">
+              <CardMedia
+                component="img"
+                height="200"
+                image={resource.imageUrl}
+                alt={resource.title || 'Placeholder'}
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {resource.title || 'Resource Title'}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" paragraph>
+                  {resource.description || 'Description not available.'}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleOpenModal(resource)}
+                >
+                  Read More
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      <Typography variant="h5" gutterBottom align="center" sx={{ mt: 6 }}>
+        Videos
+      </Typography>
+      <Grid container spacing={4}>
+        {paddedVideos.map((video, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card variant="outlined">
+              <CardMedia
+                component="iframe"
+                height="200"
+                src={video.videoUrl.replace('watch?v=', 'embed/')} // Convert to embed URL format
+                title={video.title}
+                frameBorder="0"
+                allowFullScreen
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {video.title || 'Video Title'}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" paragraph>
+                  {video.description || 'Description not available.'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Modal */}
+      {currentResource && (
+        <Dialog open={modalOpen} onClose={handleCloseModal} fullWidth maxWidth="md">
+          <DialogTitle>
+            <Typography variant="h5" align="center">
+              {currentResource.title}
+            </Typography>
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={handleCloseModal}
+              aria-label="close"
+              sx={{ position: 'absolute', right: 8, top: 8 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <img
+              src={currentResource.imageUrl}
+              alt={currentResource.title}
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '300px', // Adjust the max height as needed
+                objectFit: 'cover',  // Ensures the image covers the container
+                marginBottom: '16px'
+              }}
+            />
+            <Typography variant="body1" paragraph>
+              {currentResource.details}
+            </Typography>
+          </DialogContent>
+        </Dialog>
+      )}
+    </Container>
+  );
+};
+
+export default EducationResources;
+
+
+//
+footer
+//
+
+import React from 'react';
+import { Container, Typography, Grid, Box, Divider, Link } from '@mui/material';
+
+// Updated image import statements
+import partner1 from '../assets/images/partner1.jpeg';
+import partner2 from '../assets/images/partner2.jpeg';
+import partner3 from '../assets/images/partner3.png'; // Updated path
+
+const Footer = () => {
+  return (
+    <footer style={{ 
+      backgroundColor: '#1976d2', // Footer background color
+      color: '#fff', 
+      padding: '20px 0', // Reduced padding for a shorter footer
+      marginTop: '60px', // Margin-top for space from content above
+    }}>
+      <Container>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom align="center" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              About Us
+            </Typography>
+            <Typography variant="body2" align="center" style={{ fontSize: '0.875rem' }}>
+              Health Heaven is dedicated to simplifying health management with an easy-to-use platform for scheduling appointments, setting reminders, and managing medical records.
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom align="center" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              Quick Links
+            </Typography>
+            <Box textAlign="center">
+              <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+                <Link href="/appointments" color="inherit" underline="hover">
+                  Schedule Appointment
+                </Link>
+              </Typography>
+              <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+                <Link href="/reminders" color="inherit" underline="hover">
+                  Set Reminders
+                </Link>
+              </Typography>
+              <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+                <Link href="/records" color="inherit" underline="hover">
+                  Manage Records
+                </Link>
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom align="center" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              Contact Us
+            </Typography>
+            <Typography variant="body2" align="center" style={{ fontSize: '0.875rem' }}>
+              Email: <Link href="mailto:support@healthheaven.com" color="inherit" underline="hover">support@healthheaven.com</Link>
+            </Typography>
+            <Typography variant="body2" align="center" style={{ fontSize: '0.875rem' }}>
+              Phone: <Link href="tel:+1234567890" color="inherit" underline="hover">+1 (234) 567-890</Link>
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Divider style={{ margin: '20px 0', backgroundColor: '#fff' }} />
+
+        {/* Trusted Partners Section */}
+        <Typography variant="h6" gutterBottom align="center" style={{ color: '#ffeb3b', marginBottom: '10px', fontSize: '1.25rem', fontWeight: 'bold' }}>
+          Our Trusted Partners
+        </Typography>
+        <Grid container spacing={1} justifyContent="center">
+          <Grid item xs={4} sm={2} style={{ textAlign: 'center' }}>
+            <img src={partner1} alt="Partner 1" style={{ 
+              borderRadius: '50%', // Makes the image circular
+              maxWidth: '100px',   // Reduces the size of the image
+              height: '100px',     // Sets a fixed height to keep the circular shape
+              objectFit: 'cover',  // Ensures the image covers the area without distortion
+              margin: '0 auto' 
+            }} />
+          </Grid>
+          <Grid item xs={4} sm={2} style={{ textAlign: 'center' }}>
+            <img src={partner2} alt="Partner 2" style={{ 
+              borderRadius: '50%', // Makes the image circular
+              maxWidth: '100px',   // Reduces the size of the image
+              height: '100px',     // Sets a fixed height to keep the circular shape
+              objectFit: 'cover',  // Ensures the image covers the area without distortion
+              margin: '0 auto' 
+            }} />
+          </Grid>
+          <Grid item xs={4} sm={2} style={{ textAlign: 'center' }}>
+            <img src={partner3} alt="Partner 3" style={{ 
+              borderRadius: '50%', // Makes the image circular
+              maxWidth: '100px',   // Reduces the size of the image
+              height: '100px',     // Sets a fixed height to keep the circular shape
+              objectFit: 'cover',  // Ensures the image covers the area without distortion
+              margin: '0 auto' 
+            }} />
+          </Grid>
+        </Grid>
+
+        <Typography variant="body2" color="textSecondary" align="center" style={{ marginTop: '20px', fontSize: '0.875rem' }}>
+          © 2024 Health Heaven. All rights reserved.
+        </Typography>
+      </Container>
+    </footer>
+  );
+};
+
+export default Footer;
+
+
+//
+Header
+//
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import FolderIcon from '@mui/icons-material/Folder';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import SchoolIcon from '@mui/icons-material/School';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import InfoIcon from '@mui/icons-material/Info';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+
+const Header = () => {
+  const iconStyle = { fontSize: '18px', marginRight: '8px' }; // Adjust icon size
+
+  return (
+    <Box>
+      {/* First Header (Green Gradient Background for Health) */}
+      <AppBar 
+        position="static" 
+        style={{ background: 'linear-gradient(45deg, #66bb6a, #4CAF50)' }}
+      >
+        <Toolbar>
+          <Typography 
+            variant="h5" 
+            style={{ flexGrow: 1, fontFamily: 'Roboto, sans-serif', fontWeight: 'bold', letterSpacing: '1px' }}
+          >
+            Health Heaven
+          </Typography>
+          <Button color="inherit" component={Link} to="/">
+            <HomeIcon style={iconStyle} /> Home
+          </Button>
+          <Button color="inherit" component={Link} to="/appointments">
+            <CalendarTodayIcon style={iconStyle} /> Appointments
+          </Button>
+          <Button color="inherit" component={Link} to="/records">
+            <FolderIcon style={iconStyle} /> Records
+          </Button>
+          <Button color="inherit" component={Link} to="/metrics">
+            <BarChartIcon style={iconStyle} /> Metrics
+          </Button>
+          <Button color="inherit" component={Link} to="/education">
+            <SchoolIcon style={iconStyle} /> Education
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      {/* Second Header (Flat Background Color, Reduced Height) */}
+      <AppBar 
+        position="static" 
+        style={{ backgroundColor: '#1976d2', height: '40px' }} // Flat background color and reduced height
+      >
+        <Toolbar style={{ minHeight: '40px' }}> {/* Reduce toolbar height */}
+          <Typography 
+            variant="body2" 
+            style={{ flexGrow: 1, fontFamily: 'Arial, sans-serif', color: '#fff' }}
+          >
+            Contact us: (555) 555-5555 | Email: info@healthheaven.com
+          </Typography>
+          <Button color="inherit" component={Link} to="/about">
+            <InfoIcon style={iconStyle} /> About Us
+          </Button>
+          <Button color="inherit" component={Link} to="/support">
+            <ContactMailIcon style={iconStyle} /> Support
+          </Button>
+          <Button color="inherit" component={Link} to="/login">
+            <LoginIcon style={iconStyle} /> Login
+          </Button>
+          <Button color="inherit" component={Link} to="/signup">
+            <PersonAddIcon style={iconStyle} /> Signup
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  );
+};
+
+export default Header;
+
+
+//
+Health Metrics
+//
+
+import React, { useState } from 'react';
+import {
+  Container, Typography, Grid, Card, CardContent, Button, FormControl, InputLabel, Select, MenuItem
+} from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
+const healthMetricsData = [
+  { name: 'Jan', heartRate: 72, steps: 8000 },
+  { name: 'Feb', heartRate: 75, steps: 8500 },
+  { name: 'Mar', heartRate: 70, steps: 9000 },
+  // Add more data points as needed
+];
+
+const HealthMetrics = () => {
+  const [dateRange, setDateRange] = useState('Last 30 Days');
+  const [metricType, setMetricType] = useState('Heart Rate');
+
+  const handleDateRangeChange = (e) => setDateRange(e.target.value);
+  const handleMetricTypeChange = (e) => setMetricType(e.target.value);
+
+  return (
+    <Container sx={{ marginTop: '30px', padding: '20px', maxWidth: '1200px' }}>
+      <Typography variant="h3" gutterBottom align="center" fontWeight="bold" color="primary.main">
+        Health Metrics Dashboard
+      </Typography>
+
+      {/* Date Range and Metric Type Filters */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Date Range</InputLabel>
+            <Select
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+            >
+              <MenuItem value="Last 7 Days">Last 7 Days</MenuItem>
+              <MenuItem value="Last 30 Days">Last 30 Days</MenuItem>
+              <MenuItem value="Last 6 Months">Last 6 Months</MenuItem>
+              <MenuItem value="Last 1 Year">Last 1 Year</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Metric Type</InputLabel>
+            <Select
+              value={metricType}
+              onChange={handleMetricTypeChange}
+              sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+            >
+              <MenuItem value="Heart Rate">Heart Rate</MenuItem>
+              <MenuItem value="Steps">Steps</MenuItem>
+              <MenuItem value="Calories Burned">Calories Burned</MenuItem>
+              <MenuItem value="Sleep Duration">Sleep Duration</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      {/* Health Metrics Chart */}
+      <Card sx={{ marginTop: '30px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom color="text.primary">
+            {metricType} Over Time
+          </Typography>
+          <LineChart width={800} height={400} data={healthMetricsData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey={metricType === 'Heart Rate' ? 'heartRate' : 'steps'} stroke="#8884d8" />
+          </LineChart>
+        </CardContent>
+      </Card>
+
+      {/* Export and Share Options */}
+      <Grid container spacing={3} sx={{ marginTop: '30px' }}>
+        <Grid item xs={12} md={6}>
+          <Button variant="contained" color="primary" fullWidth>
+            Export Data
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Button variant="outlined" color="secondary" fullWidth>
+            Share Report
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
+
+export default HealthMetrics;
+
+
+
+
+//
+Medical Record
+//
+
+import React, { useState } from 'react';
+import { Container, Typography, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, InputAdornment } from '@mui/material';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+
+// Define a component for the file upload
+const FileUpload = ({ onFileChange }) => (
+  <Button
+    variant="contained"
+    color="default"
+    component="label"
+    startIcon={<AttachFileIcon />}
+    style={{ marginTop: '20px' }}
+  >
+    Attach File
+    <input
+      type="file"
+      hidden
+      onChange={(e) => onFileChange(e.target.files[0])}
+    />
+  </Button>
+);
+
+const MedicalRecord = () => {
+  const [recordTitle, setRecordTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState(null);
+  const [date, setDate] = useState(null);
+  const [category, setCategory] = useState('');
+
+  const handleSave = () => {
+    // Handle the save functionality here
+    console.log('Record Title:', recordTitle);
+    console.log('Description:', description);
+    console.log('Date:', date);
+    console.log('Category:', category);
+    console.log('File:', file);
+  };
+
+  return (
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Manage Medical Records
+      </Typography>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          <TextField
+            label="Record Title"
+            fullWidth
+            margin="normal"
+            value={recordTitle}
+            onChange={(e) => setRecordTitle(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Date"
+              value={date}
+              onChange={(newDate) => setDate(newDate)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+            />
+          </LocalizationProvider>
+        </Grid>
+      </Grid>
+      <TextField
+        label="Description"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Category</InputLabel>
+        <Select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+        >
+          <MenuItem value="General">General</MenuItem>
+          <MenuItem value="Appointment">Appointment</MenuItem>
+          <MenuItem value="Prescriptions">Prescriptions</MenuItem>
+          <MenuItem value="Lab Results">Lab Results</MenuItem>
+        </Select>
+      </FormControl>
+      <FileUpload onFileChange={(file) => setFile(file)} />
+      <Button
+        variant="contained"
+        color="primary"
+        style={{ marginTop: '20px' }}
+        onClick={handleSave}
+      >
+        Save Record
+      </Button>
+    </Container>
+  );
+};
+
+export default MedicalRecord;
+
+
+//
+Medical Reminder
+//
+
+import React, { useState } from 'react';
+import {
+  Container, Typography, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Switch, FormControlLabel
+} from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
+
+// Helper function to format date and time
+const formatDateTime = (date) => {
+  if (!date) return '';
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
+
+const SetReminder = () => {
+  // State variables
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
+  const [recurrence, setRecurrence] = useState('None');
+  const [notifyPush, setNotifyPush] = useState(true);
+  const [notifyEmail, setNotifyEmail] = useState(false);
+  const [notifySMS, setNotifySMS] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Handle form submission
+  const handleSubmit = () => {
+    const reminder = {
+      date: date ? formatDateTime(date) : '',
+      time: time ? formatDateTime(time) : '',
+      recurrence,
+      notifications: {
+        push: notifyPush,
+        email: notifyEmail,
+        sms: notifySMS,
+      },
+      message,
+    };
+    console.log('Reminder Data:', reminder);
+    // Logic to save the reminder, e.g., API call
+  };
+
+  return (
+    <Container sx={{ marginTop: '30px', padding: '20px', maxWidth: '600px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+      <Typography variant="h3" gutterBottom align="center" fontWeight="bold" color="primary.main">
+        Set Reminder
+      </Typography>
+
+      {/* Date and Time Selection */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" color="text.primary">
+        Date and Time
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Select Date"
+              value={date}
+              onChange={(newDate) => setDate(newDate)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              label="Select Time"
+              value={time}
+              onChange={(newTime) => setTime(newTime)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+      </Grid>
+
+      {/* Recurrence Options */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ marginTop: '20px' }} color="text.primary">
+        Recurrence
+      </Typography>
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Recurrence</InputLabel>
+        <Select
+          value={recurrence}
+          onChange={(e) => setRecurrence(e.target.value)}
+          sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+        >
+          <MenuItem value="None">None</MenuItem>
+          <MenuItem value="Daily">Daily</MenuItem>
+          <MenuItem value="Weekly">Weekly</MenuItem>
+          <MenuItem value="Monthly">Monthly</MenuItem>
+          <MenuItem value="Custom">Custom</MenuItem>
+        </Select>
+      </FormControl>
+
+      {/* Notification Methods */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ marginTop: '20px' }} color="text.primary">
+        Notification Methods
+      </Typography>
+      <FormControlLabel
+        control={<Switch checked={notifyPush} onChange={() => setNotifyPush(!notifyPush)} />}
+        label="Push Notifications"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+      <FormControlLabel
+        control={<Switch checked={notifyEmail} onChange={() => setNotifyEmail(!notifyEmail)} />}
+        label="Email Notifications"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+      <FormControlLabel
+        control={<Switch checked={notifySMS} onChange={() => setNotifySMS(!notifySMS)} />}
+        label="SMS Alerts"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+
+      {/* Message Content */}
+      <TextField
+        label="Reminder Message"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+      />
+
+      {/* Save Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          marginTop: '30px',
+          padding: '12px 24px', // Increased padding for a larger button
+          fontSize: '16px', // Larger font size for better readability
+          fontWeight: 'bold', // Make the text bold
+          borderRadius: '8px', // Rounded corners for a modern look
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Subtle shadow for depth
+          transition: 'background-color 0.3s ease', // Smooth hover transition
+          '&:hover': {
+            backgroundColor: '#0056b3', // Slightly darker blue on hover
+          },
+        }}
+        onClick={handleSubmit}
+        fullWidth // Makes the button span the full width of its container
+      >
+        Save Reminder
+      </Button>
+    </Container>
+  );
+};
+
+export default SetReminder;
+
+
+////Pages///
+//
+Appointmentt
+//
+
+import React, { useState } from 'react';
+import { Container, Typography, TextField, Button, Grid, Box, Alert } from '@mui/material';
+
+const AppointmentScheduler = () => {
+  const [appointmentData, setAppointmentData] = useState({
+    name: '',
+    email: '',
+    date: '',
+    time: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleChange = (e) => {
+    setAppointmentData({
+      ...appointmentData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      // Example API call
+      // await api.scheduleAppointment(appointmentData);
+      console.log('Appointment Data:', appointmentData);
+      
+      // Simulate success
+      setSuccess('Appointment scheduled successfully!');
+      
+      // Reset form
+      setAppointmentData({
+        name: '',
+        email: '',
+        date: '',
+        time: '',
+      });
+    } catch (err) {
+      setError('Failed to schedule appointment. Please try again.');
+    }
+  };
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 3 }}>
+      <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ mb: 2 }}>
+        Schedule an Appointment
+      </Typography>
+      <Typography variant="body1" paragraph align="center">
+        Use the form below to schedule, reschedule, or cancel your medical appointments.
+      </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
+      {success && <Alert severity="success">{success}</Alert>}
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="name"
+              name="name"
+              label="Full Name"
+              value={appointmentData.name}
+              onChange={handleChange}
+              required
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="email"
+              name="email"
+              label="Email Address"
+              value={appointmentData.email}
+              onChange={handleChange}
+              required
+              variant="outlined"
+              type="email"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="date"
+              name="date"
+              label="Appointment Date"
+              type="date"
+              value={appointmentData.date}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="time"
+              name="time"
+              label="Appointment Time"
+              type="time"
+              value={appointmentData.time}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+        >
+          Schedule Appointment
+        </Button>
+      </Box>
+    </Container>
+  );
+};
+
+export default AppointmentScheduler;
+
+
+///
+Homepage
+//
+import React from 'react';
+import {
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  Card,
+  CardContent,
+  CardMedia,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+
+import feature1 from '../assets/images/feature1.jpeg';
+import feature2 from '../assets/images/feature2.jpeg';
+import feature3 from '../assets/images/feature3.jpeg';
+import article1 from '../assets/images/testimonial1.png';
+import article2 from '../assets/images/testimonial2.jpeg';
+import article3 from '../assets/images/testimonial3.jpeg';
+import partner1 from '../assets/images/partner1.jpeg';
+import partner2 from '../assets/images/partner2.jpeg';
+import partner3 from '../assets/images/partner3.png';
+
+const HomePage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <Container maxWidth="lg" style={{ padding: '0' }}>
+      {/* Hero Section */}
+      <Grid
+        container
+        style={{
+          position: 'relative',
+          height: '60vh',
+          backgroundColor: '#1976d2', // Solid color for background
+          color: '#fff',
+          textAlign: 'center',
+          padding: '40px 20px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '5px', // Space between header and hero section
+        }}
+      >
+        <Grid item xs={12} style={{ position: 'relative', zIndex: 1 }}>
+          <Typography
+            variant="h2"
+            component="h1"
+            style={{
+              fontWeight: 'bold',
+              marginBottom: '20px',
+            }}
+          >
+            Welcome to Health Heaven
+          </Typography>
+          <Typography
+            variant="h6"
+            paragraph
+            style={{
+              marginBottom: '30px',
+              maxWidth: '800px',
+              margin: '0 auto',
+            }}
+          >
+            Managing health care appointments, medication schedules, and medical
+            records can be challenging. Health Heaven simplifies health
+            management by providing a centralized platform to schedule
+            appointments, receive medication reminders, and track medical
+            records. This improves adherence to treatment plans and enhances
+            communication with healthcare providers for better health outcomes.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/appointments"
+            style={{
+              maxWidth: '200px',
+              backgroundColor: '#fff', // Contrast with the hero background
+              color: '#2196f3', // Blue text for the button
+              textTransform: 'uppercase',
+            }}
+          >
+            Get Started
+          </Button>
+        </Grid>
+      </Grid>
+
+      {/* Quick Access Section */}
+      <Grid
+        container
+        spacing={4}
+        style={{ marginTop: '40px', justifyContent: 'center' }}
+      >
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+            <Typography variant="h5" gutterBottom>
+              Book an Appointment
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Schedule your appointments with ease and never miss an important
+              check-up.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/appointments"
+              style={{ backgroundColor: '#2196f3', color: '#fff' }} // Blue color
+            >
+              Schedule Now
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+            <Typography variant="h5" gutterBottom>
+              Set Medication Reminders
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Never miss a dose with timely reminders for your medications.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/reminders"
+              style={{ backgroundColor: '#2196f3', color: '#fff' }} // Blue color
+            >
+              Set Reminders
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+            <Typography variant="h5" gutterBottom>
+              Track Medical Records
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Securely manage and access your medical records whenever needed.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/records"
+              style={{ backgroundColor: '#2196f3', color: '#fff' }} // Blue color
+            >
+              Manage Records
+            </Button>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      {/* Features Section */}
+      <Grid
+        container
+        spacing={4}
+        style={{ marginTop: '40px', justifyContent: 'center' }}
+      >
+        <Grid item xs={12}>
+          <Typography
+            variant="h4"
+            component="h2"
+            style={{
+              marginBottom: '20px',
+              textAlign: 'center',
+              color: '#388e3c',
+            }}
+          >
+            Explore Our Features
+          </Typography>
+        </Grid>
+
+        {/* Feature Cards */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Card style={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={feature1}
+              alt="Appointment Scheduling"
+            />
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Appointment Scheduling
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Easily schedule and manage your medical appointments with
+                healthcare providers, ensuring you never miss an important
+                check-up.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/appointments"
+                fullWidth
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: '#2196f3',
+                  color: '#fff',
+                }} // Blue color
+              >
+                Schedule Now
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Card style={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={feature2}
+              alt="Medication Reminders"
+            />
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Medication Reminders
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Set medication reminders to ensure you never miss a dose,
+                helping you stay on track with your treatment plan.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/reminders"
+                fullWidth
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: '#2196f3',
+                  color: '#fff',
+                }} // Blue color
+              >
+                Set Reminders
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Card style={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={feature3}
+              alt="Medical Records Tracking"
+            />
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Medical Records Tracking
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Securely store and manage your medical records in one place,
+                easily accessible whenever you need them.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/records"
+                fullWidth
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: '#2196f3',
+                  color: '#fff',
+                }} // Blue color
+              >
+                Manage Records
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Featured Articles Section */}
+      <Container style={{ marginTop: '60px' }}>
+        <Typography
+          variant="h4"
+          component="h2"
+          gutterBottom
+          align="center"
+          style={{ marginBottom: '30px', color: '#388e3c' }}
+        >
+          Featured Articles
+        </Typography>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={article1}
+                alt="Article 1"
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Article Title 1
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  A brief summary of the first featured article. This summary
+                  should give readers a glimpse of what the article is about.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/articles/1"
+                  style={{
+                    marginTop: '10px',
+                    backgroundColor: '#2196f3',
+                    color: '#fff',
+                  }} // Blue color
+                >
+                  Read More
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={article2}
+                alt="Article 2"
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Article Title 2
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  A brief summary of the second featured article. This summary
+                  should give readers a glimpse of what the article is about.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/articles/2"
+                  style={{
+                    marginTop: '10px',
+                    backgroundColor: '#2196f3',
+                    color: '#fff',
+                  }} // Blue color
+                >
+                  Read More
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={article3}
+                alt="Article 3"
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Article Title 3
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  A brief summary of the third featured article. This summary
+                  should give readers a glimpse of what the article is about.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/articles/3"
+                  style={{
+                    marginTop: '10px',
+                    backgroundColor: '#2196f3',
+                    color: '#fff',
+                  }} // Blue color
+                >
+                  Read More
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+
+      
+      {/* Call to Action Section */}
+      <Container
+        style={{
+          marginTop: '60px',
+          padding: '40px 20px',
+          backgroundColor: '#2196f3',
+          color: '#fff',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Ready to take control of your health?
+        </Typography>
+        <Typography variant="h6" paragraph>
+          Sign up now to access personalized health management features and
+          stay on top of your medical care.
+        </Typography>
+        <Button
+          variant="contained"
+          color="secondary"
+          component={Link}
+          to="/signup"
+          style={{
+            padding: '10px 30px',
+            fontSize: '18px',
+            backgroundColor: '#fff',
+            color: '#2196f3',
+          }}
+        >
+          Join Now
+        </Button>
+      </Container>
+    </Container>
+  );
+};
+
+export default HomePage;
+
+
+
+///
+Health Metrics
+///
+import React, { useState } from 'react';
+import {
+  Container, Typography, Grid, Card, CardContent, Button, FormControl, InputLabel, Select, MenuItem
+} from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
+const healthMetricsData = [
+  { name: 'Jan', heartRate: 72, steps: 8000 },
+  { name: 'Feb', heartRate: 75, steps: 8500 },
+  { name: 'Mar', heartRate: 70, steps: 9000 },
+  // Add more data points as needed
+];
+
+const MetricsPage = () => {
+  const [dateRange, setDateRange] = useState('Last 30 Days');
+  const [metricType, setMetricType] = useState('Heart Rate');
+
+  const handleDateRangeChange = (e) => setDateRange(e.target.value);
+  const handleMetricTypeChange = (e) => setMetricType(e.target.value);
+
+  return (
+    <Container sx={{ marginTop: '30px', padding: '20px', maxWidth: '1200px' }}>
+      <Typography variant="h3" gutterBottom align="center" fontWeight="bold" color="primary.main">
+        Health Metrics Dashboard
+      </Typography>
+
+      {/* Date Range and Metric Type Filters */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Date Range</InputLabel>
+            <Select
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+            >
+              <MenuItem value="Last 7 Days">Last 7 Days</MenuItem>
+              <MenuItem value="Last 30 Days">Last 30 Days</MenuItem>
+              <MenuItem value="Last 6 Months">Last 6 Months</MenuItem>
+              <MenuItem value="Last 1 Year">Last 1 Year</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Metric Type</InputLabel>
+            <Select
+              value={metricType}
+              onChange={handleMetricTypeChange}
+              sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+            >
+              <MenuItem value="Heart Rate">Heart Rate</MenuItem>
+              <MenuItem value="Steps">Steps</MenuItem>
+              <MenuItem value="Calories Burned">Calories Burned</MenuItem>
+              <MenuItem value="Sleep Duration">Sleep Duration</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      {/* Health Metrics Chart */}
+      <Card sx={{ marginTop: '30px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom color="text.primary">
+            {metricType} Over Time
+          </Typography>
+          <LineChart width={800} height={400} data={healthMetricsData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey={metricType === 'Heart Rate' ? 'heartRate' : 'steps'} stroke="#8884d8" />
+          </LineChart>
+        </CardContent>
+      </Card>
+
+      {/* Export and Share Options */}
+      <Grid container spacing={3} sx={{ marginTop: '30px' }}>
+        <Grid item xs={12} md={6}>
+          <Button variant="contained" color="primary" fullWidth>
+            Export Data
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Button variant="outlined" color="secondary" fullWidth>
+            Share Report
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
+
+export default MetricsPage;
+
+////
+Record Pages
+////
+// src/components/MedicalRecord.js
+import React, { useState } from 'react';
+import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton, FormControl, InputLabel, Select, MenuItem, InputAdornment } from '@mui/material';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DatePicker from '@mui/lab/DatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+
+// Define a component for the file upload
+const FileUpload = ({ onFileChange }) => (
+  <Button
+    variant="contained"
+    color="default"
+    component="label"
+    startIcon={<AttachFileIcon />}
+    style={{ marginTop: '20px' }}
+  >
+    Attach File
+    <input
+      type="file"
+      hidden
+      onChange={(e) => onFileChange(e.target.files[0])}
+    />
+  </Button>
+);
+
+const MedicalRecord = () => {
+  const [recordTitle, setRecordTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState(null);
+  const [date, setDate] = useState(null);
+  const [category, setCategory] = useState('');
+
+  const handleSave = () => {
+    // Handle the save functionality here
+    console.log('Record Title:', recordTitle);
+    console.log('Description:', description);
+    console.log('Date:', date);
+    console.log('Category:', category);
+    console.log('File:', file);
+  };
+
+  return (
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Manage Medical Records
+      </Typography>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          <TextField
+            label="Record Title"
+            fullWidth
+            margin="normal"
+            value={recordTitle}
+            onChange={(e) => setRecordTitle(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Date"
+              value={date}
+              onChange={(newDate) => setDate(newDate)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+            />
+          </LocalizationProvider>
+        </Grid>
+      </Grid>
+      <TextField
+        label="Description"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Category</InputLabel>
+        <Select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+        >
+          <MenuItem value="General">General</MenuItem>
+          <MenuItem value="Appointment">Appointment</MenuItem>
+          <MenuItem value="Prescriptions">Prescriptions</MenuItem>
+          <MenuItem value="Lab Results">Lab Results</MenuItem>
+        </Select>
+      </FormControl>
+      <FileUpload onFileChange={(file) => setFile(file)} />
+      <Button
+        variant="contained"
+        color="primary"
+        style={{ marginTop: '20px' }}
+        onClick={handleSave}
+      >
+        Save Record
+      </Button>
+    </Container>
+  );
+};
+
+export default MedicalRecord;
+
+
+///
+Medical Remider
+///
+
+import React, { useState } from 'react';
+import {
+  Container, Typography, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Switch, FormControlLabel
+} from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
+
+// Helper function to format date and time
+const formatDateTime = (date) => {
+  if (!date) return '';
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
+
+const SetReminder = () => {
+  // State variables
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
+  const [recurrence, setRecurrence] = useState('None');
+  const [notifyPush, setNotifyPush] = useState(true);
+  const [notifyEmail, setNotifyEmail] = useState(false);
+  const [notifySMS, setNotifySMS] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Handle form submission
+  const handleSubmit = () => {
+    const reminder = {
+      date: date ? formatDateTime(date) : '',
+      time: time ? formatDateTime(time) : '',
+      recurrence,
+      notifications: {
+        push: notifyPush,
+        email: notifyEmail,
+        sms: notifySMS,
+      },
+      message,
+    };
+    console.log('Reminder Data:', reminder);
+    // Logic to save the reminder, e.g., API call
+  };
+
+  return (
+    <Container sx={{ marginTop: '30px', padding: '20px', maxWidth: '600px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+      <Typography variant="h3" gutterBottom align="center" fontWeight="bold" color="primary.main">
+        Set Reminder
+      </Typography>
+
+      {/* Date and Time Selection */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" color="text.primary">
+        Date and Time
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Select Date"
+              value={date}
+              onChange={(newDate) => setDate(newDate)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              label="Select Time"
+              value={time}
+              onChange={(newTime) => setTime(newTime)}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+      </Grid>
+
+      {/* Recurrence Options */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ marginTop: '20px' }} color="text.primary">
+        Recurrence
+      </Typography>
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Recurrence</InputLabel>
+        <Select
+          value={recurrence}
+          onChange={(e) => setRecurrence(e.target.value)}
+          sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+        >
+          <MenuItem value="None">None</MenuItem>
+          <MenuItem value="Daily">Daily</MenuItem>
+          <MenuItem value="Weekly">Weekly</MenuItem>
+          <MenuItem value="Monthly">Monthly</MenuItem>
+          <MenuItem value="Custom">Custom</MenuItem>
+        </Select>
+      </FormControl>
+
+      {/* Notification Methods */}
+      <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ marginTop: '20px' }} color="text.primary">
+        Notification Methods
+      </Typography>
+      <FormControlLabel
+        control={<Switch checked={notifyPush} onChange={() => setNotifyPush(!notifyPush)} />}
+        label="Push Notifications"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+      <FormControlLabel
+        control={<Switch checked={notifyEmail} onChange={() => setNotifyEmail(!notifyEmail)} />}
+        label="Email Notifications"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+      <FormControlLabel
+        control={<Switch checked={notifySMS} onChange={() => setNotifySMS(!notifySMS)} />}
+        label="SMS Alerts"
+        sx={{ display: 'block', marginBottom: '10px' }}
+      />
+
+      {/* Message Content */}
+      <TextField
+        label="Reminder Message"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        sx={{ backgroundColor: 'background.paper', borderRadius: '4px' }}
+      />
+
+      {/* Save Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          marginTop: '30px',
+          padding: '12px 24px', // Increased padding for a larger button
+          fontSize: '16px', // Larger font size for better readability
+          fontWeight: 'bold', // Make the text bold
+          borderRadius: '8px', // Rounded corners for a modern look
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Subtle shadow for depth
+          transition: 'background-color 0.3s ease', // Smooth hover transition
+          '&:hover': {
+            backgroundColor: '#0056b3', // Slightly darker blue on hover
+          },
+        }}
+        onClick={handleSubmit}
+        fullWidth // Makes the button span the full width of its container
+      >
+        Save Reminder
+      </Button>
+    </Container>
+  );
+};
+
+export default SetReminder;
+
+
+
+
+
+
+
+

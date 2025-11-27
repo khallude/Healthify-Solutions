@@ -1,0 +1,39 @@
+const jwt = require("jsonwebtoken");
+
+const doctorMiddleware = (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(403).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.error("JWT Verification Error:", err.message);
+      return res.status(401).json({ message: "Failed to authenticate token" });
+    }
+
+    console.log("Decoded Token:", decoded); // 🛠️ Debugging log
+
+    // ✅ Ensure role exists and is correctly formatted
+    if (!decoded.role) {
+      return res.status(400).json({ message: "Invalid token: No role found" });
+    }
+
+    console.log("Decoded Role:", decoded.role); // 🛠️ Debugging log
+
+    if (decoded.role.toLowerCase() !== "doctor") {
+      return res.status(403).json({ message: "Access denied: Not a doctor" });
+    }
+
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
+
+    next();
+  });
+};
+
+module.exports = doctorMiddleware;
+ 
